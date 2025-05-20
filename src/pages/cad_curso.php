@@ -1,5 +1,5 @@
 <?php
-require __DIR__ . "/../classes/curso.php";
+require_once "src/classes/curso.php";
 
 //iniccializa as varoáveis
 $titulo = $horas = $dias = $aluno = "";
@@ -14,7 +14,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     try {
         $curso = new Curso($titulo, $horas, $dias, $aluno);
-        $cursoCriado = true;
+        $cursoCriado = $curso->cadastrar();
+        if ($cursoCriado) {
+            echo "<div class='alert alert-success'>Cadastro efetuado com sucesso</div>";
+        } else {
+            echo "<div class='alert alert-danger'>Erro ao cadastrar o curso</div>";
+        }
     } catch (Exception $e) {
         echo "<div class='alert alert-danger mt-3'>" . $e->getMessage() . "</div>";
     }

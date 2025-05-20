@@ -1,14 +1,20 @@
 <?php
+ 
+require_once "db/db.php";
+ 
 class Escola {
-    public $endereco;
     public $nome;
+    public $endereco;
     public $cidade;
     private $cnpj;
  
     // Construtor com validação
-    public function __construct($nome, $cidade, $cnpj,$endereco) {
+    public function __construct($nome, $endereco, $cidade, $cnpj) {
         if (empty($nome)) {
             throw new Exception("O campo Nome é obrigatório.");
+        }
+        if (empty($endereco)) {
+            throw new Exception("O campo Endereço é obrigatório.");
         }
         if (empty($cidade)) {
             throw new Exception("O campo Cidade é obrigatório.");
@@ -16,14 +22,10 @@ class Escola {
         if (empty($cnpj)) {
             throw new Exception("O campo CNPJ é obrigatório.");
         }
-        
-        if (empty($endereco)) {
-            throw new Exception("O campo Endereço é obrigatório.");
-        }
         $this->nome = $nome;
+        $this->endereco = $endereco;
         $this->cidade = $cidade;
         $this->cnpj = $cnpj;
-        $this->endereco = $endereco;
     }
  
     // Getter do CPF (encapsulamento)
@@ -34,10 +36,32 @@ class Escola {
     // Método para exibir os dados
     public function exibirDados() {
         echo "<p>Nome da escola: <strong>$this->nome</strong><br>";
+        echo "Endereço: <strong>$this->endereco</strong><br>";
         echo "Cidade: <strong>$this->cidade</strong><br>";
         echo "CNPJ: <strong>" . $this->getCnpj() . "</strong></p>";
-        echo "<p>Endereço: <strong>$this->endereco</strong></p>";
+    }
+ 
+    // Método para cadastrar a escola no banco de dados
+    public function cadastrar() {
+        // Conexão com o banco de dados
+        $database = new Database();
+        $conn = $database->getConnection();
+ 
+        // Preparar a consulta SQL
+        $query = "INSERT INTO escola (nome, endereco, cidade, cnpj) VALUES (:nome, :endereco, :cidade, :cnpj)";
+        $stmt = $conn->prepare($query);
+ 
+        // Bind dos parâmetros
+        $stmt->bindParam(':nome', $this->nome);
+        $stmt->bindParam(':endereco', $this->endereco);
+        $stmt->bindParam(':cidade', $this->cidade);
+        $stmt->bindParam(':cnpj', $this->cnpj);
+ 
+        // Executar a consulta
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
-
-
