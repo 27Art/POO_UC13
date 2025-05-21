@@ -24,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "<div class='alert alert-danger mt-3'>" . $e->getMessage() . "</div>";
     }
 }
-
+$alunos = Aluno::listar();
 ?>
 
 <h2>Cadastro de Aluno</h2>
@@ -59,10 +59,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 </form>
 
-<?php
-if ($alunoCriado) {
-    echo "<h3>Resultado:</h3>";
-    $aluno->exibirDados();
-}
-?>
+<h3>Lista de Alunos</h3>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>CPF</th>
+            <th>Idade</th>
+            <th>Curso</th>
+        </tr>
+    </thead>
+    <tbody>
+       <?php if ($alunos && count($alunos) > 0): ?>
+            <?php foreach ($alunos as $aluno): ?>
+                <tr>
+                    <td><?= htmlspecialchars($aluno['nome']) ?></td>
+                    <td><?= htmlspecialchars($aluno['cpf']) ?></td>
+                    <td><?= htmlspecialchars($aluno['idade']) ?></td>
+                    <td><?= htmlspecialchars($aluno['curso']) ?></td>
+                </tr>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <tr>
+                <td colspan="4" class="text-center">Nenhum aluno cadastrado.</td>
+            </tr>
+        <?php endif; ?>
+    </tbody>
+</table>
 
