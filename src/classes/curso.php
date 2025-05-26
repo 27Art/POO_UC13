@@ -37,25 +37,44 @@ class Curso {
         echo "<p>dias: <strong>$this->dias</strong></p>";
     }
 
-    // Método para cadastrar a escola no banco de dados
-    public function Cadastrar() {
+  // Método para cadastrar a escola no banco de dados
+        public function cadastrar() {
         // Conexão com o banco de dados
         $database = new Database();
         $conn = $database->getConnection();
  
         // Preparar a consulta SQL
-        $query = "INSERT INTO curso (titulo, horas, dias, alunos) VALUES (:titulo, :horas, :dias, :alunos)";
+        $query = "INSERT INTO alunos (nome, idade, cpf, curso) VALUES (:nome, :idade, :cpf, :curso)";
         $stmt = $conn->prepare($query);
  
         // Bind dos parâmetros
-        $stmt->bindParam(':titulo', $this->titulo);
-        $stmt->bindParam(':horas', $this->horas);
-        $stmt->bindParam(':dias', $this->dias);
-        $stmt->bindParam(':alunos', $this->aluno);
- 
+        $stmt->bindParam(':nome', $this->titulo);
+        $stmt->bindParam(':idade', $this->horas);
+        $stmt->bindParam(':cpf', $this->dias);
+        $stmt->bindParam(':curso', $this->aluno);
+
         // Executar a consulta
         if ($stmt->execute()) {
             return true;
+        } else {
+            return false;
+        }
+    }
+
+    // Método para listar os alunos
+    public static function listar() {
+        // Conexão com o banco de dados
+        $database = new Database();
+        $conn = $database->getConnection();
+ 
+        // Preparar a consulta SQL
+        $query = "SELECT * FROM curso";
+        $stmt = $conn->prepare($query);
+        $stmt->execute();
+ 
+        // Executar a consulta
+        if ($stmt->execute()) {
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } else {
             return false;
         }

@@ -14,7 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     try {
         $curso = new Curso($titulo, $horas, $dias, $aluno);
-        $cursoCriado = $curso->cadastrar();
+        $cursoCriado = $curso->Cadastrar();
         if ($cursoCriado) {
             echo "<div class='alert alert-success'>Cadastro efetuado com sucesso</div>";
         } else {
@@ -24,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "<div class='alert alert-danger mt-3'>" . $e->getMessage() . "</div>";
     }
 }
-
+$cursos = Curso::listar();
 ?>
 
 <h2>Cadastro de curso</h2>
@@ -49,7 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 
     <div class="col-md-3">
-        <label for="aluno" class="form-label">Aluno:</label>
+        <label for="aluno" class="form-label">Alunos:</label>
         <input type="text" name="aluno" id="aluno" class="form-control"
             value="<?= htmlspecialchars($aluno) ?>">
     </div>
@@ -59,10 +59,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 </form>
 
-<?php
-if ($cursoCriado) {
-    echo "<h3>Resultado:</h3>";
-    $curso->exibirDados();
-}
-?>
+<h3>Lista de Cursos</h3>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Titulo</th>
+            <th>Horas</th>
+            <th>Dias</th>
+            <th>Alunos</th>
+        </tr>
+    </thead>
+    <tbody>
+       <?php if ($cursos && count($cursos) > 0): ?>
+            <?php foreach ($cursos as $curso): ?>
+                <tr>
+                    <td><?= htmlspecialchars($curso['Titulo']) ?></td>
+                    <td><?= htmlspecialchars($curso['Horas']) ?></td>
+                    <td><?= htmlspecialchars($curso['Dias']) ?></td>
+                    <td><?= htmlspecialchars($curso['Alunos']) ?></td>
+                </tr>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <tr>
+                <td colspan="4" class="text-center">Nenhum curso cadastrado.</td>
+            </tr>
+        <?php endif; ?>
+    </tbody>
+</table>
 

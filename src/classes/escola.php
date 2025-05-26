@@ -64,4 +64,23 @@ class Escola {
             return false;
         }
     }
+
+    // Método para listar as escolas
+    public static function listar() {
+        // Conexão com o banco de dados
+        $database = new Database();
+        $conn = $database->getConnection();
+ 
+        // Preparar a consulta SQL
+        $query = "SELECT * FROM escola";
+        $stmt = $conn->prepare($query);
+        $stmt->execute();
+ 
+        // Executar a consulta
+        if ($stmt->execute()) {
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } else {
+            return [];
+        }
+    }
 }

@@ -21,6 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "<div class='alert alert-danger'>Erro ao cadastrar a escola</div>";
     }
 }
+$escolas = Escola::listar();
 ?>
  
 <h2>Cadastro de Escola</h2>
@@ -54,3 +55,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <button type="submit" class="btn btn-primary">Cadastrar</button>
     </div>
 </form>
+
+<h3>Lista de Escola</h3>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>CNPJ</th>
+            <th>Endereço</th>
+            <th>Cidade</th>
+        </tr>
+    </thead>
+    <tbody>
+       <?php if ($escolas && count($escolas) > 0): ?>
+            <?php foreach ($escolas as $escola): ?>
+                <tr>
+                    <td><?= htmlspecialchars($escola['nome']) ?></td>
+                    <td><?= htmlspecialchars($escola['cnpj']) ?></td>
+                    <td><?= htmlspecialchars($escola['endereco']) ?></td>
+                    <td><?= htmlspecialchars($escola['Cidade']) ?></td>
+                </tr>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <tr>
+                <td colspan="4" class="text-center">Nenhuma escola cadastrada.</td>
+            </tr>
+        <?php endif; ?>
+    </tbody>
+</table>
